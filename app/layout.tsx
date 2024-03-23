@@ -6,6 +6,7 @@ import "jsvectormap/dist/css/jsvectormap.css";
 import "flatpickr/dist/flatpickr.min.css";
 import "@/css/satoshi.css";
 import "@/css/style.css";
+import DashboardLayout from "@/components/Layouts/DashboardLayout";
 
 export default function RootLayout({
   children,
@@ -17,11 +18,23 @@ export default function RootLayout({
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
+
+  const isAuth = true;
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
         <div className="dark:bg-boxdark-2 dark:text-bodydark">
-          {loading ? <Loader /> : children}
+          {loading ? (
+            <Loader />
+          ) : isAuth ? (
+            <DashboardLayout>{children}</DashboardLayout>
+          ) : (
+            <main>
+              <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                {children}
+              </div>
+            </main>
+          )}
         </div>
       </body>
     </html>
