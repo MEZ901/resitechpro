@@ -3,9 +3,8 @@ import React from "react";
 import ChartOne from "../Charts/ChartOne";
 import ChartThree from "../Charts/ChartThree";
 import ChartTwo from "../Charts/ChartTwo";
-import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
-import CardDataStats from "../CardDataStats";
+import CardDataStats from "./CardDataStats";
 
 const Dashboard: React.FC = () => {
   return (
@@ -104,7 +103,6 @@ const Dashboard: React.FC = () => {
         <div className="col-span-12 xl:col-span-7">
           <TableOne />
         </div>
-        {/* <ChatCard /> */}
       </div>
     </>
   );
