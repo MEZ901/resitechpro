@@ -35,6 +35,33 @@ const DropdownMessage = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  const elements = [
+    {
+      name: "Mariya Desoja",
+      message: "I like your confidence 💪",
+      time: "2min ago",
+      image: "/images/user/user-02.png",
+    },
+    {
+      name: "Robert Jhon",
+      message: "Can you share your offer?",
+      time: "10min ago",
+      image: "/images/user/user-01.png",
+    },
+    {
+      name: "Henry Dholi",
+      message: "I cam across your profile and...",
+      time: "1day ago",
+      image: "/images/user/user-03.png",
+    },
+    {
+      name: "Cody Fisher",
+      message: "I’m waiting for you response!",
+      time: "5days ago",
+      image: "/images/user/user-04.png",
+    },
+  ];
+
   return (
     <li className="relative">
       <Link
@@ -95,141 +122,35 @@ const DropdownMessage = () => {
         </div>
 
         <ul className="flex h-auto flex-col overflow-y-auto">
-          <li>
-            <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="/messages"
-            >
-              <div className="h-12.5 w-12.5 rounded-full">
-                <Image
-                  width={112}
-                  height={112}
-                  src={"/images/user/user-02.png"}
-                  alt="User"
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                  }}
-                />
-              </div>
+          {elements.map((element, index) => (
+            <li key={index}>
+              <Link
+                className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+                href="#"
+              >
+                <div className="h-12.5 w-12.5 rounded-full">
+                  <Image
+                    width={112}
+                    height={112}
+                    src={element.image}
+                    alt="User"
+                    style={{
+                      width: "auto",
+                      height: "auto",
+                    }}
+                  />
+                </div>
 
-              <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Mariya Desoja
-                </h6>
-                <p className="text-sm">I like your confidence 💪</p>
-                <p className="text-xs">2min ago</p>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="/messages"
-            >
-              <div className="h-12.5 w-12.5 rounded-full">
-                <Image
-                  width={112}
-                  height={112}
-                  src={"/images/user/user-01.png"}
-                  alt="User"
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                  }}
-                />
-              </div>
-
-              <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Robert Jhon
-                </h6>
-                <p className="text-sm">Can you share your offer?</p>
-                <p className="text-xs">10min ago</p>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="/messages"
-            >
-              <div className="h-12.5 w-12.5 rounded-full">
-                <Image
-                  width={112}
-                  height={112}
-                  src={"/images/user/user-03.png"}
-                  alt="User"
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                  }}
-                />
-              </div>
-
-              <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Henry Dholi
-                </h6>
-                <p className="text-sm">I cam across your profile and...</p>
-                <p className="text-xs">1day ago</p>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="/messages"
-            >
-              <div className="h-12.5 w-12.5 rounded-full">
-                <Image
-                  width={112}
-                  height={112}
-                  src={"/images/user/user-04.png"}
-                  alt="User"
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                  }}
-                />
-              </div>
-
-              <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Cody Fisher
-                </h6>
-                <p className="text-sm">I’m waiting for you response!</p>
-                <p className="text-xs">5days ago</p>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="/messages"
-            >
-              <div className="h-12.5 w-12.5 rounded-full">
-                <Image
-                  width={112}
-                  height={112}
-                  src={"/images/user/user-02.png"}
-                  alt="User"
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                  }}
-                />
-              </div>
-
-              <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Mariya Desoja
-                </h6>
-                <p className="text-sm">I like your confidence 💪</p>
-                <p className="text-xs">2min ago</p>
-              </div>
-            </Link>
-          </li>
+                <div>
+                  <h6 className="text-sm font-medium text-black dark:text-white">
+                    {element.name}
+                  </h6>
+                  <p className="text-sm">{element.message}</p>
+                  <p className="text-xs">{element.time}</p>
+                </div>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
       {/* <!-- Dropdown End --> */}
