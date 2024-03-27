@@ -1,37 +1,22 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Sign In",
-};
+import Navbar from "@/components/Navbar";
 
 const SignIn: React.FC = () => {
   return (
     <div className="rounded-sm border min-h-screen border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Navbar />
       <div className="flex flex-wrap items-center">
         <div className="hidden w-full xl:block xl:w-1/2">
           <div className="px-26 py-17.5 text-center">
-            <Link className="mb-5.5 inline-block" href="/">
-              <Image
-                className="hidden dark:block"
-                src={"/images/logo/logo-white-transparent.png"}
-                alt="Logo"
-                width={176}
-                height={32}
-              />
-              <Image
-                className="dark:hidden"
-                src={"/images/logo/logo-black-transparent.png"}
-                alt="Logo"
-                width={176}
-                height={32}
-              />
-            </Link>
+            <h1 className="mb-5 text-3xl font-bold text-black dark:text-white">
+              Welcome back!
+            </h1>
 
             <p className="2xl:px-20">
-              Welcome back! Please sign in to your account to continue.
+              Please sign in to your account to continue.
             </p>
 
             <span className="mt-15 inline-block">

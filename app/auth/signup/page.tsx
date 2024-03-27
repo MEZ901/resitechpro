@@ -1,36 +1,21 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "SignUp",
-};
+import Navbar from "@/components/Navbar";
 
 const SignUp: React.FC = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Navbar />
       <div className="flex flex-wrap items-center">
         <div className="hidden w-full xl:block xl:w-1/2">
           <div className="px-26 py-17.5 text-center">
-            <Link className="mb-5.5 inline-block" href="/">
-              <Image
-                className="hidden dark:block"
-                src={"/images/logo/logo-white-transparent.png"}
-                alt="Logo"
-                width={176}
-                height={32}
-              />
-              <Image
-                className="dark:hidden"
-                src={"/images/logo/logo-black-transparent.png"}
-                alt="Logo"
-                width={176}
-                height={32}
-              />
-            </Link>
+            <h1 className="mb-5 text-3xl font-bold text-black dark:text-white">
+              Welcome!
+            </h1>
             <p className="2xl:px-20">
-              Welcome! Sign up to get started with ResiTech Pro
+              Sign up to get started with ResiTech Pro
             </p>
 
             <span className="mt-15 inline-block">

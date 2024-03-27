@@ -5,6 +5,7 @@ type ButtonProps = {
   icon?: React.ReactNode;
   rounded?: "none" | "md" | "full";
   variant?: "solid" | "bordered";
+  className?: string;
   href?: string;
   onClick?: () => void;
 };
@@ -14,8 +15,10 @@ const Button = ({
   icon,
   rounded,
   variant,
+  className,
   href,
   onClick,
+  ...rest
 }: ButtonProps) => {
   return (
     <Link
@@ -31,7 +34,8 @@ const Button = ({
         variant === "bordered"
           ? "border border-primary text-primary"
           : "bg-primary text-white"
-      }`}
+      } ${className || ""}`}
+      {...rest}
     >
       {icon && <span>{icon}</span>}
       {title}
