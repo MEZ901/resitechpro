@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import { useAppSelector } from "@/store";
+import { redirect } from "next/navigation";
 
 export default function DashboardLayout({
   children,
@@ -10,6 +12,13 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const authState = useAppSelector((state) => state.auth.authState);
+
+  useEffect(() => {
+    if (!authState) {
+      redirect("/auth/signin");
+    }
+  }, [authState]);
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />

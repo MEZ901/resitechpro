@@ -1,4 +1,5 @@
 import Chart from "@/components/Charts/page";
+import DashboardLayout from "@/components/Layouts/DashboardLayout";
 import { Metadata } from "next";
 import React from "react";
 
@@ -7,7 +8,11 @@ export const metadata: Metadata = {
 };
 
 const BasicChartPage: React.FC = () => {
-  return <Chart />;
+  return (
+    <DashboardLayout>
+      <Chart />
+    </DashboardLayout>
+  );
 };
 
 export default BasicChartPage;

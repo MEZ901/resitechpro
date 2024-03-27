@@ -1,15 +1,18 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import DashboardLayout from "@/components/Layouts/DashboardLayout";
 import TableThree from "@/components/Tables/TableThree";
 
 const Permissions = () => {
   return (
-    <div className="mx-auto">
-      <Breadcrumb pageName="Permissions Managment" />
+    <DashboardLayout>
+      <div className="mx-auto">
+        <Breadcrumb pageName="Permissions Managment" />
 
-      <div>
-        <TableThree />
+        <div>
+          <TableThree />
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

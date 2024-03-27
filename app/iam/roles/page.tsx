@@ -1,15 +1,18 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import DashboardLayout from "@/components/Layouts/DashboardLayout";
 import TableThree from "@/components/Tables/TableThree";
 
 const Roles = () => {
   return (
-    <div className="mx-auto">
-      <Breadcrumb pageName="Roles Managment" />
+    <DashboardLayout>
+      <div className="mx-auto">
+        <Breadcrumb pageName="Roles Managment" />
 
-      <div>
-        <TableThree />
+        <div>
+          <TableThree />
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
