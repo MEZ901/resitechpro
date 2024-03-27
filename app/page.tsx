@@ -15,7 +15,6 @@ export default function Home() {
     </DashboardLayout>
   ) : (
     <div>
-      <button onClick={() => dispatch(setAuthState(true))}>Sign in</button>
       <LandingPage />
     </div>
   );

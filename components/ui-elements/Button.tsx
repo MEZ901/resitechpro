@@ -2,7 +2,7 @@ import Link from "next/link";
 
 type ButtonProps = {
   title: string;
-  icon?: React.ReactNode;
+  icon?: { align: "start" | "end"; icon: JSX.Element };
   rounded?: "none" | "md" | "full";
   variant?: "solid" | "bordered";
   className?: string;
@@ -37,8 +37,9 @@ const Button = ({
       } ${className || ""}`}
       {...rest}
     >
-      {icon && <span>{icon}</span>}
+      {icon?.align === "start" && <span>{icon.icon}</span>}
       {title}
+      {icon?.align === "end" && <span>{icon.icon}</span>}
     </Link>
   );
 };
