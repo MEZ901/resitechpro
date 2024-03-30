@@ -6,7 +6,7 @@ import "jsvectormap/dist/css/jsvectormap.css";
 import "flatpickr/dist/flatpickr.min.css";
 import "@/css/satoshi.css";
 import "@/css/style.css";
-import ReduxProvider from "@/store/redux-provider";
+import ReduxProvider from "@/app/redux-provider";
 
 export default function RootLayout({
   children,

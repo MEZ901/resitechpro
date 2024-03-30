@@ -11,6 +11,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.2",
     "apexcharts": "^3.48.0",
+    "crypto-js": "^4.2.0",
     "flatpickr": "^4.6.13",
     "formik": "^2.4.5",
     "jsvectormap": "^1.5.3",
@@ -23,6 +24,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

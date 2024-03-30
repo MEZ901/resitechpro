@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import { useAppSelector } from "@/store";
+import { useAppSelector } from "@/lib/store";
 import { redirect } from "next/navigation";
 
 export default function DashboardLayout({
@@ -12,7 +12,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const authState = useAppSelector((state) => state.auth.authState);
+  const authState = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
     if (!authState) {
