@@ -5,9 +5,16 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import { useState } from "react";
 import Alert from "../ui-elements/Alert";
+import { useRegisterMutation } from "@/lib/features/auth/authApiSlice";
+import { useAppDispatch } from "@/lib/store";
+import { setCredentials } from "@/lib/features/auth/authSlice";
+import { encryptData } from "@/utils/helpers";
+import { redirect } from "next/navigation";
 
 const SignupForm = () => {
   const [error, setError] = useState(null);
+  const [register, { isLoading }] = useRegisterMutation();
+  const dispatch = useAppDispatch();
   const { values, errors, touched, handleChange, handleSubmit, handleBlur } =
     useFormik({
       initialValues: {
@@ -18,7 +25,18 @@ const SignupForm = () => {
       },
       validationSchema: registerSchema,
       onSubmit: async (data) => {
-        console.log(data);
+        try {
+          const { user } = await register(data).unwrap();
+
+          dispatch(setCredentials({ ...user }));
+
+          const encryptedUser = encryptData(user);
+          localStorage.setItem("user", encryptedUser);
+
+          redirect("/");
+        } catch (error: any) {
+          setError(error?.data?.message || "internal server error");
+        }
       },
     });
   return (
