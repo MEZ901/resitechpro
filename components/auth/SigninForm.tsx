@@ -5,15 +5,15 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import Alert from "../ui-elements/Alert";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useLoginMutation } from "@/lib/features/auth/authApiSlice";
 import { setCredentials } from "@/lib/features/auth/authSlice";
 import { encryptData } from "@/utils/helpers";
 import { redirect } from "next/navigation";
+import { useAppDispatch } from "@/lib/store";
 
 const SigninForm = () => {
   const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
 
   const { values, errors, touched, handleChange, handleSubmit, handleBlur } =

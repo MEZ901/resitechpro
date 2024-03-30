@@ -1,9 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useLogoutMutation } from "@/lib/features/auth/authApiSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import { logOut } from "@/lib/features/auth/authSlice";
+import { redirect } from "next/navigation";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const user = useAppSelector((state) => state.auth.user);
+  const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -34,11 +41,22 @@ const DropdownUser = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-  const user = {
-    name: "Issam Mezgueldi",
-    role: "Software Developer",
-    image: "/images/user/user-01.png",
+  const handleLogout = async () => {
+    try {
+      await logout({}).unwrap();
+      dispatch(logOut());
+      localStorage.removeItem("user");
+      redirect("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  // const user = {
+  //   name: "Issam Mezgueldi",
+  //   role: "Software Developer",
+  //   image: "/images/user/user-01.png",
+  // };
 
   const elements = [
     {
@@ -118,19 +136,20 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            {user.name}
+            {user.userName}
           </span>
-          <span className="block text-xs">{user.role}</span>
+          <span className="block text-xs">{user.email}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
           <Image
             width={112}
             height={112}
-            src={user.image}
+            src={user.image || "/images/user/default-profile.jpg"}
             style={{
               width: "auto",
               height: "auto",
+              borderRadius: "50%",
             }}
             alt="User"
           />
@@ -175,7 +194,10 @@ const DropdownUser = () => {
             </li>
           ))}
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+          onClick={handleLogout}
+        >
           <svg
             className="fill-current"
             width="22"
