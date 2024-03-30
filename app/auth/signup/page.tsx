@@ -1,10 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import SignupForm from "@/components/auth/SignupForm";
+import { useAppSelector } from "@/lib/store";
+import { redirect } from "next/navigation";
 
 const SignUp: React.FC = () => {
+  const authState = useAppSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (authState) {
+      redirect("/");
+    }
+  }, [authState]);
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <Navbar />

@@ -4,10 +4,10 @@ import {
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-// import { logOut } from "../../features/auth/redux/authSlice";
+import { logOut } from "./features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:8080/api/",
+  baseUrl: "http://localhost:3001/api/",
   credentials: "include",
   prepareHeaders: (headers) => {
     headers.set("content-type", "application/json");
@@ -34,7 +34,7 @@ const baseQueryWithReauth = async (
 
     if (refreshResult?.error) {
       console.log("Refresh token failed");
-      //   api.dispatch(logOut());
+      api.dispatch(logOut());
       localStorage.removeItem("user");
     } else {
       console.log("Refresh token success");

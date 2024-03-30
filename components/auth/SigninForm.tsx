@@ -5,9 +5,17 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import Alert from "../ui-elements/Alert";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLoginMutation } from "@/lib/features/auth/authApiSlice";
+import { setCredentials } from "@/lib/features/auth/authSlice";
+import { encryptData } from "@/utils/helpers";
+import { redirect } from "next/navigation";
 
 const SigninForm = () => {
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const [login, { isLoading }] = useLoginMutation();
+
   const { values, errors, touched, handleChange, handleSubmit, handleBlur } =
     useFormik({
       initialValues: {
@@ -16,7 +24,17 @@ const SigninForm = () => {
       },
       validationSchema: loginSchema,
       onSubmit: async (data) => {
-        console.log(data);
+        try {
+          const { user } = await login(data).unwrap();
+
+          dispatch(setCredentials({ ...user }));
+
+          const encryptedUser = encryptData(user);
+          localStorage.setItem("user", encryptedUser);
+          redirect("/");
+        } catch (error: any) {
+          setError(error?.data?.message || "internal server error");
+        }
       },
     });
 
@@ -167,7 +185,7 @@ const SigninForm = () => {
             </defs>
           </svg>
         </span>
-        Sign in with Google hhhhhh
+        Sign in with Google
       </button>
 
       <div className="mt-6 text-center">
