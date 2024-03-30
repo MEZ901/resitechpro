@@ -71,6 +71,8 @@ Alternatively, you can use `docker-compose` for a more streamlined setup:
 
 The application will be accessible at `http://localhost:3000`.
 
+> _Please note that this project relies on API endpoints from services in the [Resitech Pro](https://github.com/ResitechPro) organization. Ensure that the necessary services are running before starting the project._
+
 ## Features
 
 - **Next.js**: Utilizes the power of Next.js for server-side rendering, routing, and API handling.
