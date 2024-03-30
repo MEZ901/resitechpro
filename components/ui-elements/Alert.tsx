@@ -4,10 +4,12 @@ const Alert = ({
   title,
   type,
   children,
+  className,
 }: {
   title: string;
   type: "warning" | "success" | "error";
   children: React.ReactNode;
+  className?: string;
 }) => {
   const icons = {
     warning: (
@@ -57,13 +59,13 @@ const Alert = ({
   };
   return (
     <div
-      className={`flex w-full border-l-6 bg-opacity-[15%] px-7 py-8 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-9 ${
+      className={`flex w-full border-l-6 bg-opacity-[15%] px-3 py-4 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-5 ${
         type === "warning"
           ? "border-warning bg-warning"
           : type === "success"
           ? "border-[#34D399] bg-[#34D399]"
           : "border-[#F87171] bg-[#F87171]"
-      }`}
+      } ${className}`}
     >
       <div
         className={`mr-5 flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg ${
