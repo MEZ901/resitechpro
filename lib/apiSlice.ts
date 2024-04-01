@@ -7,7 +7,7 @@ import {
 import { logOut } from "./features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3001/api/",
+  baseUrl: "http://localhost:3005/api/",
   credentials: "include",
   prepareHeaders: (headers) => {
     headers.set("content-type", "application/json");
