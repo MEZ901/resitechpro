@@ -1,73 +1,36 @@
+"use client";
+
+import { useGetRolesQuery } from "@/lib/features/iam/iamApiSlice";
 import Button from "../ui-elements/Button";
 
+type Role = {
+  id: string;
+  name: string;
+  pemrissions: {
+    id: number;
+    resource: string;
+    actions: string;
+  }[];
+};
+
 const RolesTable = () => {
-  const roles = [
-    {
-      name: "Admin",
-      pemrissions: [
-        {
-          id: 1,
-          resource: "Users",
-          actions: "read",
-        },
-        {
-          id: 2,
-          resource: "Users",
-          actions: "create",
-        },
-        {
-          id: 3,
-          resource: "Users",
-          actions: "update",
-        },
-        {
-          id: 4,
-          resource: "Users",
-          actions: "delete",
-        },
-        {
-          id: 5,
-          resource: "Roles",
-          actions: "read",
-        },
-        {
-          id: 6,
-          resource: "Roles",
-          actions: "create",
-        },
-        {
-          id: 7,
-          resource: "Roles",
-          actions: "update",
-        },
-        {
-          id: 8,
-          resource: "Roles",
-          actions: "delete",
-        },
-        {
-          id: 9,
-          resource: "Permissions",
-          actions: "read",
-        },
-        {
-          id: 10,
-          resource: "Permissions",
-          actions: "create",
-        },
-        {
-          id: 11,
-          resource: "Permissions",
-          actions: "update",
-        },
-        {
-          id: 12,
-          resource: "Permissions",
-          actions: "delete",
-        },
-      ],
-    },
-  ];
+  const { data, error, isLoading, refetch } = useGetRolesQuery({});
+
+  if (isLoading)
+    return (
+      <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 text-center">
+        <p>Loading...</p>
+      </div>
+    );
+
+  if (error) {
+    console.log(error);
+    return (
+      <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 text-center">
+        <p>Failed to load roles</p>
+      </div>
+    );
+  }
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <Button
@@ -107,7 +70,7 @@ const RolesTable = () => {
             </tr>
           </thead>
           <tbody>
-            {roles.map((role, key) => (
+            {data.map((role: Role, key: number) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">

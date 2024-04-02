@@ -1,3 +1,5 @@
+"use client";
+
 import { decryptData } from "@/utils/helpers";
 import { createSlice } from "@reduxjs/toolkit";
 

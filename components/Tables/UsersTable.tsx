@@ -1,40 +1,35 @@
+"use client";
+
+import { useGetUsersQuery } from "@/lib/features/iam/iamApiSlice";
 import Button from "../ui-elements/Button";
 
+type User = {
+  id: string;
+  username: string;
+  role: {
+    id: string;
+    name: string;
+  };
+};
+
 const UsersTable = () => {
-  const users = [
-    {
-      username: "Issam",
-      role: {
-        id: 1,
-        name: "Admin",
-      },
-      status: "Active",
-    },
-    {
-      username: "Haytham",
-      role: {
-        id: 1,
-        name: "Resident",
-      },
-      status: "Active",
-    },
-    {
-      username: "Adam",
-      role: {
-        id: 1,
-        name: "Resident",
-      },
-      status: "Active",
-    },
-    {
-      username: "Ali",
-      role: {
-        id: 1,
-        name: "Employee",
-      },
-      status: "Inactive",
-    },
-  ];
+  const { data, error, isLoading, refetch } = useGetUsersQuery({});
+
+  if (isLoading)
+    return (
+      <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 text-center">
+        <p>Loading...</p>
+      </div>
+    );
+
+  if (error) {
+    console.log(error);
+    return (
+      <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 text-center">
+        <p>Failed to load users</p>
+      </div>
+    );
+  }
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <Button
@@ -77,7 +72,7 @@ const UsersTable = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, key) => (
+            {data.map((user: User, key: number) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
@@ -90,14 +85,15 @@ const UsersTable = () => {
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
-                      user.status === "Active"
-                        ? "bg-success text-success"
-                        : user.status === "Inactive"
+                      // TODO: Check the actual status of the user
+                      /* user.status === "Active"
+                        ? */ "bg-success text-success"
+                      /* :  user.status === "Inactive"
                         ? "bg-danger text-danger"
-                        : "bg-warning text-warning"
+                        : "bg-warning text-warning" */
                     }`}
                   >
-                    {user.status}
+                    Active
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

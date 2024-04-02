@@ -1,6 +1,17 @@
+"use client";
+
+import { useGetPermissionsQuery } from "@/lib/features/iam/iamApiSlice";
 import Button from "../ui-elements/Button";
 
+type Permission = {
+  id: string;
+  resource: string;
+  action: string;
+};
+
 const PermissionsTable = () => {
+  const { data, error, isLoading, refetch } = useGetPermissionsQuery({});
+
   const roles = [
     {
       resource: "Users",
@@ -35,6 +46,22 @@ const PermissionsTable = () => {
       action: "Delete",
     },
   ];
+
+  if (isLoading)
+    return (
+      <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 text-center">
+        <p>Loading...</p>
+      </div>
+    );
+
+  if (error) {
+    console.log(error);
+    return (
+      <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 text-center">
+        <p>Failed to load permissions</p>
+      </div>
+    );
+  }
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <Button
@@ -74,15 +101,15 @@ const PermissionsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {roles.map((role, key) => (
+            {data.map((permission: Permission, key: number) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {role.resource}
+                    {permission.resource}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <div className="flex items-center">{role.action}</div>
+                  <div className="flex items-center">{permission.action}</div>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
