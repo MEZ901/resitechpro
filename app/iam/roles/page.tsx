@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DashboardLayout from "@/components/Layouts/DashboardLayout";
-import TableThree from "@/components/Tables/TableThree";
+import RolesTable from "@/components/Tables/RolesTable";
 
 const Roles = () => {
   return (
@@ -9,7 +9,7 @@ const Roles = () => {
         <Breadcrumb pageName="Roles Managment" />
 
         <div>
-          <TableThree />
+          <RolesTable />
         </div>
       </div>
     </DashboardLayout>

@@ -1,6 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DashboardLayout from "@/components/Layouts/DashboardLayout";
 import TableThree from "@/components/Tables/TableThree";
+import UsersTable from "@/components/Tables/UsersTable";
 
 const Users = () => {
   return (
@@ -9,7 +10,7 @@ const Users = () => {
         <Breadcrumb pageName="Users Managment" />
 
         <div>
-          <TableThree />
+          <UsersTable />
         </div>
       </div>
     </DashboardLayout>

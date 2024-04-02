@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DashboardLayout from "@/components/Layouts/DashboardLayout";
-import TableThree from "@/components/Tables/TableThree";
+import PermissionsTable from "@/components/Tables/PermissionsTable";
 
 const Permissions = () => {
   return (
@@ -9,7 +9,7 @@ const Permissions = () => {
         <Breadcrumb pageName="Permissions Managment" />
 
         <div>
-          <TableThree />
+          <PermissionsTable />
         </div>
       </div>
     </DashboardLayout>
