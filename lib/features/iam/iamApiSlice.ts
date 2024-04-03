@@ -24,7 +24,7 @@ export const iamApiSlice = apiSlice.injectEndpoints({
     updateUser: builder.mutation({
       query: (user) => ({
         url: `/users/${user.id}`,
-        method: "PUT",
+        method: "PATCH",
         body: { ...user },
       }),
     }),
@@ -56,7 +56,7 @@ export const iamApiSlice = apiSlice.injectEndpoints({
     updateRole: builder.mutation({
       query: (role) => ({
         url: `/roles/${role.id}`,
-        method: "PUT",
+        method: "PATCH",
         body: { ...role },
       }),
     }),
@@ -88,7 +88,7 @@ export const iamApiSlice = apiSlice.injectEndpoints({
     updatePermission: builder.mutation({
       query: (permission) => ({
         url: `/permissions/${permission.id}`,
-        method: "PUT",
+        method: "PATCH",
         body: { ...permission },
       }),
     }),

@@ -7,6 +7,7 @@ import {
 import Button from "../ui-elements/Button";
 import AddUserModal from "../modals/AddUserModal";
 import { useState } from "react";
+import UpdateUserModal from "../modals/UpdateUserModal";
 
 type User = {
   id: string;
@@ -19,6 +20,13 @@ type User = {
 
 const UsersTable = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [editUser, setEditUser] = useState<User>({
+    id: "",
+    username: "",
+    role: { id: "", name: "" },
+  });
+
   const { data, error, isLoading, refetch } = useGetUsersQuery({});
   const [remove, { isLoading: isRemoving }] = useDeleteUserMutation();
 
@@ -31,6 +39,12 @@ const UsersTable = () => {
     }
   };
 
+  const handleEdit = (user: User) => {
+    setEditUser(user);
+    setTimeout(() => {
+      setEditOpen(true);
+    }, 100);
+  };
   if (isLoading)
     return (
       <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 text-center">
@@ -49,6 +63,12 @@ const UsersTable = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <AddUserModal open={open} setOpen={setOpen} refetch={refetch} />
+      <UpdateUserModal
+        open={editOpen}
+        setOpen={setEditOpen}
+        refetch={refetch}
+        user={editUser}
+      />
       <Button
         title=""
         icon={{
@@ -116,7 +136,10 @@ const UsersTable = () => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
-                    <button className="hover:text-primary">
+                    <button
+                      className="hover:text-primary"
+                      onClick={() => handleEdit(user)}
+                    >
                       <svg
                         className="fill-current"
                         width="18"
