@@ -2,6 +2,8 @@
 
 import { useGetUsersQuery } from "@/lib/features/iam/iamApiSlice";
 import Button from "../ui-elements/Button";
+import AddUserModal from "../modals/AddUserModal";
+import { useState } from "react";
 
 type User = {
   id: string;
@@ -14,6 +16,7 @@ type User = {
 
 const UsersTable = () => {
   const { data, error, isLoading, refetch } = useGetUsersQuery({});
+  const [open, setOpen] = useState<boolean>(false);
 
   if (isLoading)
     return (
@@ -32,6 +35,7 @@ const UsersTable = () => {
   }
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <AddUserModal open={open} setOpen={setOpen} />
       <Button
         title=""
         icon={{
@@ -52,6 +56,7 @@ const UsersTable = () => {
         }}
         rounded="full"
         className="absolute bottom-5 right-5 px-4 xl:px-4 lg:px-6"
+        onClick={() => setOpen(true)}
       />
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
