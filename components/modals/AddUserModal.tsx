@@ -1,13 +1,64 @@
-import { useGetRolesQuery } from "@/lib/features/iam/iamApiSlice";
-import SelectInput from "../ui-elements/SelectInput";
+import {
+  useCreateUserMutation,
+  useGetRolesQuery,
+} from "@/lib/features/iam/iamApiSlice";
+import { useFormik } from "formik";
+import createUserSchema from "@/schemas/iam/createUserSchema";
+import { useEffect, useState } from "react";
+import Alert from "../ui-elements/Alert";
 
 type AddUserModalProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
+  refetch: () => void;
 };
 
-const AddUserModal = ({ open, setOpen }: AddUserModalProps) => {
+type Role = { id: string; name: string };
+
+const AddUserModal = ({ open, setOpen, refetch }: AddUserModalProps) => {
+  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
+  const [error, setError] = useState(null);
+
   const { data: roles } = useGetRolesQuery({});
+
+  const [createUser, { isLoading }] = useCreateUserMutation();
+
+  const changeTextColor = () => {
+    setIsOptionSelected(true);
+  };
+
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleSubmit,
+    handleBlur,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+      roleId: null,
+    },
+    validationSchema: createUserSchema,
+    onSubmit: async (data) => {
+      try {
+        const createdUser = await createUser(data).unwrap();
+        console.log(createdUser);
+        refetch();
+        setOpen(false);
+      } catch (error: any) {
+        console.log(error);
+        setError(error?.data?.message || "internal server error");
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (selectedOption !== "") setFieldValue("roleId", selectedOption);
+  }, [selectedOption]);
 
   return (
     <div
@@ -20,34 +71,147 @@ const AddUserModal = ({ open, setOpen }: AddUserModalProps) => {
           Add User
         </h3>
         <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
-        <div className="mb-4.5">
-          <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-            Username
-          </label>
-          <input
-            type="text"
-            placeholder="Username"
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-          />
-        </div>
-        <div>
-          <SelectInput title="role" options={roles} />
-        </div>
-        <div className="-mx-3 flex flex-wrap gap-y-4">
-          <div className="w-full px-3 2xsm:w-1/2">
-            <button
-              className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
+        {error && (
+          <Alert
+            title="An error occurred while creating user"
+            type="error"
+            className="mb-3"
+          >
+            {error}
+          </Alert>
+        )}
+        <form onSubmit={handleSubmit}>
+          {/* -- username -- */}
+          <div className="mb-4.5">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+              Username
+            </label>
+            <input
+              className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 text-black outline-none focus-visible:shadow-none dark:bg-form-input dark:text-white ${
+                errors.username && touched.username
+                  ? "border-red focus:border-red dark:border-red dark:focus:border-red"
+                  : "border-stroke focus:border-primary dark:border-form-strokedark dark:focus:border-primary"
+              }`}
+              placeholder="Username"
+              name="username"
+              type="text"
+              value={values.username}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+
+            <span className="text-sm text-red">
+              {errors.username && touched.username ? errors.username : null}
+            </span>
           </div>
-          <div className="w-full px-3 2xsm:w-1/2">
-            <button className="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90">
-              Save
-            </button>
+
+          {/* -- password -- */}
+          <div className="mb-4.5">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+              Password
+            </label>
+            <input
+              className={`w-full rounded-lg border bg-transparent py-4 pl-6 pr-10 text-black outline-none focus-visible:shadow-none dark:bg-form-input dark:text-white ${
+                errors.password && touched.password
+                  ? "border-red focus:border-red dark:border-red dark:focus:border-red"
+                  : "border-stroke focus:border-primary dark:border-form-strokedark dark:focus:border-primary"
+              }`}
+              placeholder="Password"
+              name="password"
+              type="password"
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+
+            <span className="text-sm text-red ms-1">
+              {errors.password && touched.password ? errors.password : null}
+            </span>
           </div>
-        </div>
+
+          {/* -- role -- */}
+          <div className="mb-4.5">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Role
+            </label>
+
+            <div className="relative z-20 bg-transparent dark:bg-form-input">
+              <select
+                value={selectedOption}
+                onChange={(e) => {
+                  setSelectedOption(e.target.value);
+                  changeTextColor();
+                }}
+                className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${
+                  isOptionSelected ? "text-black dark:text-white" : ""
+                } ${
+                  errors.roleId && touched.roleId
+                    ? "border-red focus:border-red dark:border-red dark:focus:border-red"
+                    : "border-stroke focus:border-primary dark:border-form-strokedark dark:focus:border-primary"
+                }`}
+              >
+                <option
+                  value=""
+                  disabled
+                  className="text-body dark:text-bodydark"
+                >
+                  Select Role
+                </option>
+                {roles?.map((role: Role) => (
+                  <option
+                    key={role.id}
+                    value={role.id}
+                    className="text-body dark:text-bodydark"
+                  >
+                    {role.name}
+                  </option>
+                ))}
+              </select>
+
+              <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
+                <svg
+                  className="fill-current"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g opacity="0.8">
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                      fill=""
+                    ></path>
+                  </g>
+                </svg>
+              </span>
+
+              <span className="text-sm text-red">
+                {errors.roleId && touched.roleId ? errors.roleId : null}
+              </span>
+            </div>
+          </div>
+          <div className="-mx-3 flex flex-wrap gap-y-4">
+            <div className="w-full px-3 2xsm:w-1/2">
+              <button
+                className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+            <div className="w-full px-3 2xsm:w-1/2">
+              <button
+                type="submit"
+                className="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
