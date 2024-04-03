@@ -1,6 +1,9 @@
 "use client";
 
-import { useGetUsersQuery } from "@/lib/features/iam/iamApiSlice";
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from "@/lib/features/iam/iamApiSlice";
 import Button from "../ui-elements/Button";
 import AddUserModal from "../modals/AddUserModal";
 import { useState } from "react";
@@ -15,8 +18,18 @@ type User = {
 };
 
 const UsersTable = () => {
-  const { data, error, isLoading, refetch } = useGetUsersQuery({});
   const [open, setOpen] = useState<boolean>(false);
+  const { data, error, isLoading, refetch } = useGetUsersQuery({});
+  const [remove, { isLoading: isRemoving }] = useDeleteUserMutation();
+
+  const handleDelete = async (id: string) => {
+    try {
+      await remove(id);
+      refetch();
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   if (isLoading)
     return (
@@ -128,7 +141,10 @@ const UsersTable = () => {
                         </g>
                       </svg>
                     </button>
-                    <button className="hover:text-primary">
+                    <button
+                      className="hover:text-primary"
+                      onClick={() => handleDelete(user.id)}
+                    >
                       <svg
                         className="fill-current"
                         width="18"
