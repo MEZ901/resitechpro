@@ -1,6 +1,10 @@
 "use client";
 
-import { useGetRolesQuery } from "@/lib/features/iam/iamApiSlice";
+import {
+  useDeleteRoleMutation,
+  useDeleteUserMutation,
+  useGetRolesQuery,
+} from "@/lib/features/iam/iamApiSlice";
 import Button from "../ui-elements/Button";
 import AddRoleModal from "../modals/AddRoleModal";
 import { useState } from "react";
@@ -8,7 +12,7 @@ import { useState } from "react";
 type Role = {
   id: string;
   name: string;
-  pemrissions: {
+  permissions: {
     id: number;
     resource: string;
     actions: string;
@@ -17,7 +21,18 @@ type Role = {
 
 const RolesTable = () => {
   const [open, setOpen] = useState<boolean>(false);
+
   const { data, error, isLoading, refetch } = useGetRolesQuery({});
+  const [remove, { isLoading: isRemoving }] = useDeleteRoleMutation();
+
+  const handleDelete = async (id: string) => {
+    try {
+      await remove(id);
+      refetch();
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   if (isLoading)
     return (
@@ -34,6 +49,7 @@ const RolesTable = () => {
       </div>
     );
   }
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <AddRoleModal open={open} setOpen={setOpen} refetch={refetch} />
@@ -84,7 +100,10 @@ const RolesTable = () => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center">
-                    <button className="hover:text-primary">
+                    <button
+                      className="hover:text-primary"
+                      onClick={() => console.log(role.permissions)}
+                    >
                       <svg
                         className="fill-current"
                         width="18"
@@ -132,7 +151,10 @@ const RolesTable = () => {
                         </g>
                       </svg>
                     </button>
-                    <button className="hover:text-primary">
+                    <button
+                      className="hover:text-primary"
+                      onClick={() => handleDelete(role.id)}
+                    >
                       <svg
                         className="fill-current"
                         width="18"
