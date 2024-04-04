@@ -1,7 +1,12 @@
 "use client";
 
-import { useGetPermissionsQuery } from "@/lib/features/iam/iamApiSlice";
+import {
+  useDeletePermissionMutation,
+  useGetPermissionsQuery,
+} from "@/lib/features/iam/iamApiSlice";
 import Button from "../ui-elements/Button";
+import { useState } from "react";
+import AddPermissionModal from "../modals/AddPermissionModal";
 
 type Permission = {
   id: string;
@@ -10,42 +15,32 @@ type Permission = {
 };
 
 const PermissionsTable = () => {
-  const { data, error, isLoading, refetch } = useGetPermissionsQuery({});
+  const [open, setOpen] = useState<boolean>(false);
+  const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [editPermission, setEditPermission] = useState<Permission>({
+    id: "",
+    resource: "",
+    action: "",
+  });
 
-  const roles = [
-    {
-      resource: "Users",
-      action: "Create",
-    },
-    {
-      resource: "Users",
-      action: "Read",
-    },
-    {
-      resource: "Users",
-      action: "Update",
-    },
-    {
-      resource: "Users",
-      action: "Delete",
-    },
-    {
-      resource: "Roles",
-      action: "Create",
-    },
-    {
-      resource: "Roles",
-      action: "Read",
-    },
-    {
-      resource: "Roles",
-      action: "Update",
-    },
-    {
-      resource: "Roles",
-      action: "Delete",
-    },
-  ];
+  const { data, error, isLoading, refetch } = useGetPermissionsQuery({});
+  const [remove, { isLoading: isRemoving }] = useDeletePermissionMutation();
+
+  const handleDelete = async (id: string) => {
+    try {
+      await remove(id);
+      refetch();
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = (permission: Permission) => {
+    setEditPermission(permission);
+    setTimeout(() => {
+      setEditOpen(true);
+    }, 100);
+  };
 
   if (isLoading)
     return (
@@ -64,6 +59,8 @@ const PermissionsTable = () => {
   }
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <AddPermissionModal open={open} setOpen={setOpen} refetch={refetch} />
+
       <Button
         title=""
         icon={{
@@ -84,6 +81,7 @@ const PermissionsTable = () => {
         }}
         rounded="full"
         className="absolute bottom-5 right-5 px-4 xl:px-4 lg:px-6"
+        onClick={() => setOpen(true)}
       />
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
