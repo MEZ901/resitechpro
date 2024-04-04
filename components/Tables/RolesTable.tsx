@@ -2,6 +2,8 @@
 
 import { useGetRolesQuery } from "@/lib/features/iam/iamApiSlice";
 import Button from "../ui-elements/Button";
+import AddRoleModal from "../modals/AddRoleModal";
+import { useState } from "react";
 
 type Role = {
   id: string;
@@ -14,6 +16,7 @@ type Role = {
 };
 
 const RolesTable = () => {
+  const [open, setOpen] = useState<boolean>(false);
   const { data, error, isLoading, refetch } = useGetRolesQuery({});
 
   if (isLoading)
@@ -33,6 +36,7 @@ const RolesTable = () => {
   }
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <AddRoleModal open={open} setOpen={setOpen} refetch={refetch} />
       <Button
         title=""
         icon={{
@@ -53,6 +57,7 @@ const RolesTable = () => {
         }}
         rounded="full"
         className="absolute bottom-5 right-5 px-4 xl:px-4 lg:px-6"
+        onClick={() => setOpen(true)}
       />
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
