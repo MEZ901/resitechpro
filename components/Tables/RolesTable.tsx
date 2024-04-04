@@ -8,11 +8,12 @@ import {
 import Button from "../ui-elements/Button";
 import AddRoleModal from "../modals/AddRoleModal";
 import { useState } from "react";
+import UpdateRoleModal from "../modals/UpdateRoleModal";
 
 type Role = {
   id: string;
   name: string;
-  permissions: {
+  permissions?: {
     id: number;
     resource: string;
     actions: string;
@@ -21,6 +22,11 @@ type Role = {
 
 const RolesTable = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [editRole, setEditRole] = useState<Role>({
+    id: "",
+    name: "",
+  });
 
   const { data, error, isLoading, refetch } = useGetRolesQuery({});
   const [remove, { isLoading: isRemoving }] = useDeleteRoleMutation();
@@ -32,6 +38,13 @@ const RolesTable = () => {
     } catch (error: any) {
       console.log(error);
     }
+  };
+
+  const handleEdit = (user: Role) => {
+    setEditRole(user);
+    setTimeout(() => {
+      setEditOpen(true);
+    }, 100);
   };
 
   if (isLoading)
@@ -53,6 +66,12 @@ const RolesTable = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <AddRoleModal open={open} setOpen={setOpen} refetch={refetch} />
+      <UpdateRoleModal
+        open={editOpen}
+        setOpen={setEditOpen}
+        refetch={refetch}
+        role={editRole}
+      />
       <Button
         title=""
         icon={{
@@ -126,7 +145,10 @@ const RolesTable = () => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
-                    <button className="hover:text-primary">
+                    <button
+                      className="hover:text-primary"
+                      onClick={() => handleEdit(role)}
+                    >
                       <svg
                         className="fill-current"
                         width="18"
