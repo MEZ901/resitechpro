@@ -7,6 +7,7 @@ import {
 import Button from "../ui-elements/Button";
 import { useState } from "react";
 import AddPermissionModal from "../modals/AddPermissionModal";
+import UpdatePermissionModal from "../modals/UpdatePermissionModal";
 
 type Permission = {
   id: string;
@@ -60,7 +61,12 @@ const PermissionsTable = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <AddPermissionModal open={open} setOpen={setOpen} refetch={refetch} />
-
+      <UpdatePermissionModal
+        open={editOpen}
+        setOpen={setEditOpen}
+        refetch={refetch}
+        permission={editPermission}
+      />
       <Button
         title=""
         icon={{
